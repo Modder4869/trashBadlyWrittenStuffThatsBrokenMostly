@@ -1,0 +1,13 @@
+{
+  "name": "converted",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "12.5.1",
+    "discord.js-pagination": "^1.0.3",
+    "node-json-db": "^1.4.1",
+    "request": "2.88.2"
+  }
+}

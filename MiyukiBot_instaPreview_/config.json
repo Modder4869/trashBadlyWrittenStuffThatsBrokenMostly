@@ -1,0 +1,6 @@
+{
+    "token": "botToken",
+    "prefix": "#",
+	"cookie":"csrftoken=instagram_csrftoken;sessionid=instagram_sessionid",
+	"enabled":true
+}
