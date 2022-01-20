@@ -66,61 +66,51 @@ client.on('messageReactionAdd', (reaction, user) => {
     }
 })
 async function sendEmbed(data, Message) {
- // console.log(data);
+	try {
     var json = JSON.parse(data)
-        //console.log(json);
-	var multiPics = (json.graphql.shortcode_media.edge_sidecar_to_children) ? true :false
+	var multiPics = (json.items[0].carousel_media) ? true :false
 
-		//checking if it has multiple pics / video 
-	var content = (json.graphql.shortcode_media.__typename == 'GraphSidecar' && json.graphql.shortcode_media?.edge_sidecar_to_children?.edges) ? json.graphql.shortcode_media.edge_sidecar_to_children.edges[0].node?.video_url : json.graphql.shortcode_media.video_url || ""
+//checking if it has multiple pics / video 
+ var content = (json.items[0].carousel_media && json.items[0].carousel_media.find(e=>e.video_versions)?.video_versions && json.items[0].carousel_media) ? json.items[0].carousel_media.find(e=>e.video_versions).video_versions[0].url :  (json.items[0].video_versions)? json.items[0].video_versions[0].url : ""
     const embed = {
 
-        "description": (json.graphql.shortcode_media.edge_media_to_caption.edges[0]) ? json.graphql.shortcode_media.edge_media_to_caption.edges[0].node.text : "",
+        "description": (json.items[0].caption) ? json.items[0].caption.text : "",
         "footer": {
             "text": "Instagram",
             "icon_url": "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png"
         },
-        "fields":[{"name":"Likes","value":json.graphql.shortcode_media.edge_media_preview_like.count,"inline":true}],
+        "fields":[{"name":"Likes","value":json.items[0].like_count,"inline":true}],
         "author": {
-            "name": json.graphql.shortcode_media.owner.username,
-            "url": `https://www.instagram.com/${json.graphql.shortcode_media.owner.username}`,
-            "icon_url":`${json.graphql.shortcode_media.owner.profile_pic_url}`
+            "name": json.items[0].user.username,
+            "url": `https://www.instagram.com/${json.items[0].user.username}`,
+            "icon_url":`${json.items[0].user.profile_pic_url}`
         },
         "color": 13500530,
         "color": 13500530,
         "image": {
-            "url": json.graphql.shortcode_media.display_resources.pop().src
+            "url": (json.items[0].carousel_media) ? json.items[0].carousel_media[0].image_versions2.candidates[0].url : json.items[0].image_versions2.candidates[0].url
         }
     };
-	//console.log(embed)
     if (embed.description.length >= 1900) {
         embed.description = 'TOO LONG TO PREVIEW#EmbedLimitation'
     }
-	//console.log(multiPics);
   
     let message = await Message.channel.send((content && multiPics) ? '📽️🖼️' : (content) ? '📽️':(multiPics) ? "🖼️" : "", {
         embed
     })
-    var shortcodeId = json.graphql.shortcode_media.id
+    var shortcodeId = json.items[0].id
     if (multiPics) {
         if (!galleryCache.getCache('/ids').hasOwnProperty(shortcodeId)){
-        galleryCache.setCache('/ids',{[shortcodeId]:json.graphql.shortcode_media.edge_sidecar_to_children?.edges.filter(e=>e.node.__typename === 'GraphImage').map(e=>e.node.display_url)})
+        galleryCache.setCache('/ids',{[shortcodeId]:json.items[0].carousel_media.map(e=>e.image_versions2.candidates[0].url)})
         }
     }
-  //  await message.react('⬅️');
-    //await message.react('➡️')
-// Import the discord.js-pagination package
-if (json.graphql.shortcode_media.edge_sidecar_to_children?.edges[0].node?.__typename === 'GraphImage'){
+if (json.items[0].carousel_media){
     test=galleryCache.getCache('/ids')
 const paginationEmbed = require('discord.js-pagination');
 var pages = [
 ];
-// Use either MessageEmbed or RichEmbed to make pages
-// Keep in mind that Embeds should't have their footers set since the pagination method sets page info there
 const { MessageEmbed } = require('discord.js');
-// const embed1 = new MessageEmbed();
  emojiList=['⏪', '⏩']
-// Create an array of embeds
 for (let i = 0; i < test[shortcodeId].length; i++) {
      receivedEmbed = message.embeds[0];
     exampleEmbed = new MessageEmbed(receivedEmbed)
@@ -141,8 +131,10 @@ paginationEmbed(message, pages, emojiList, 2 * 60 * 60 * 1000,shortcodeId,galler
         let lastMessage = messages.first();
 
       }).catch(console.error);
+	} catch(e){
+		console.log(e)
+	}
 }
- // <-- your pre-filled channel variable
 
 
 
