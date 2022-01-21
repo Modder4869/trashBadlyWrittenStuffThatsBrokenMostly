@@ -136,7 +136,7 @@ async function sendEmbed(data, Message) {
             embed.description = 'TOO LONG TO PREVIEW#EmbedLimitation'
         }
 
-        let message = await Message.channel.send({content:(content && multiPics) ? '📽️🖼️' : (content) ? '📽️' : (multiPics) ? "🖼️" : "",embeds:[embed]})
+        let message = await Message.channel.send({content:(content && multiPics) ? '📽️🖼️' : (content) ? '📽️' : (multiPics) ? "🖼️" : " ",embeds:[embed]})
         var shortcodeId = json.graphql.shortcode_media.id
         if (multiPics) {
             if (!galleryCache.getCache('/ids').hasOwnProperty(shortcodeId)) {
