@@ -9,7 +9,6 @@ const config = require("./config.json")
 const galleryCacheClass = require("./testGallery.js");
 const galleryCache = new galleryCacheClass();
 const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
-const paginationEmbed = require('discord.js-pagination');
 client.on("ready", () => {
         console.log("Bot has initialized")
     })
