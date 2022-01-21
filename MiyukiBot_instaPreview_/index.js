@@ -72,7 +72,7 @@ paginationEmbed = async (msg, pages, emojiList = ['⏪', '⏩'], timeout = 12000
 	if (!pages) throw new Error('Pages are not given.');
 	if (emojiList.length !== 2) throw new Error('Need two emojis.');
 	let page = 0;
-	const curPage = await msg.channel.send({embeds:[pages[page].setFooter({text:`Page ${page + 1} / ${pages.length}`})]})
+	const curPage = await msg.edit({embeds:[pages[page].setFooter({text:`Page ${page + 1} / ${pages.length}`})]})
 	for (const emoji of emojiList) await curPage.react(emoji);
 	const reactionCollector = curPage.createReactionCollector({filter:
 		(reaction, user) => emojiList.includes(reaction.emoji.name) && !user.bot,time:timeout ,max:100,dispose:true}
