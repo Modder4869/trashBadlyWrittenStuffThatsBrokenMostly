@@ -128,7 +128,7 @@ async function sendEmbed(data, Message) {
         embed.description = 'TOO LONG TO PREVIEW#EmbedLimitation'
     }
   
-    let message = await Message.channel.send((content && multiPics) ? '📽️🖼️' : (content) ? '📽️':(multiPics) ? "🖼️" : "", {
+    let message = await Message.channel.send((content && multiPics) ? '📽️🖼️' : (content) ? '📽️':(multiPics) ? "🖼️" : " ", {
         embed
     })
     var shortcodeId = json.items[0].id
