@@ -1,12 +1,10 @@
 {
-  "name": "converted",
+  "name": "MiyukiBot",
   "version": "1.0.0",
-  "description": "",
+  "description": "embed isntagram links",
   "author": "",
-  "license": "ISC",
   "dependencies": {
-    "discord.js": "12.5.1",
-    "discord.js-pagination": "^1.0.3",
+    "discord.js": "^13.6.0",
     "node-json-db": "^1.4.1",
     "request": "2.88.2"
   }
