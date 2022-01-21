@@ -8,7 +8,6 @@ const client = new Client({
 });
 const req = require("request")
 const config = require("./config.json")
-const command = require("./command")
 const galleryCacheClass = require("./testGallery.js");
 //const { debug } = require("request");
 const galleryCache = new galleryCacheClass();
