@@ -68,6 +68,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 async function sendEmbed(data, Message) {
 	try {
     var json = JSON.parse(data)
+	if(!json) return
 	var multiPics = (json.items[0].carousel_media) ? true :false
 
 //checking if it has multiple pics / video 
@@ -120,7 +121,7 @@ pages.push(exampleEmbed)
 
 
 
-paginationEmbed(message, pages, emojiList, 2 * 60 * 60 * 1000,shortcodeId,galleryCache);
+paginationEmbed(message, pages, emojiList, config.cacheTimeMs,shortcodeId,galleryCache);
 }
 
     if (content) {
