@@ -3,7 +3,6 @@ const { MessageEmbed } = require('discord.js');
 const client = new Discord.Client()
 const req = require("request")
 const config = require("./config.json")
-const command = require("./command")
 const galleryCacheClass = require("./testGallery.js");
 const galleryCache = new galleryCacheClass();
 const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
