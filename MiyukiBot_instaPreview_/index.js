@@ -5,14 +5,13 @@ const req = require("request")
 const config = require("./config.json")
 const command = require("./command")
 const galleryCacheClass = require("./testGallery.js");
-//const { debug } = require("request");
 const galleryCache = new galleryCacheClass();
 const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
 const paginationEmbed = require('discord.js-pagination');
 client.on("ready", () => {
         console.log("Bot has initialized")
     })
-client.on("message", Message => {
+client.on("messageCreate", Message => {
         //check if message author is bot and return
         if (Message.author.bot) return;
         //check if message has contents
@@ -65,6 +64,38 @@ client.on('messageReactionAdd', (reaction, user) => {
         console.log(e);
     }
 })
+//copied from https://github.com/saanuregh/discord.js-pagination/blob/master/index.js
+paginationEmbed = async (msg, pages, emojiList = ['⏪', '⏩'], timeout = 120000,id,galleryCache) => {
+	if (!msg && !msg.channel) throw new Error('Channel is inaccessible.');
+	if (!pages) throw new Error('Pages are not given.');
+	if (emojiList.length !== 2) throw new Error('Need two emojis.');
+	let page = 0;
+	const curPage = await msg.channel.send({embeds:[pages[page].setFooter({text:`Page ${page + 1} / ${pages.length}`})]})
+	for (const emoji of emojiList) await curPage.react(emoji);
+	const reactionCollector = curPage.createReactionCollector({filter:
+		(reaction, user) => emojiList.includes(reaction.emoji.name) && !user.bot,time:timeout ,max:100,dispose:true}
+	);
+	reactionCollector.on('collect', reaction => {
+		switch (reaction.emoji.name) {
+			case emojiList[0]:
+				page = page > 0 ? --page : pages.length - 1;
+				break;
+			case emojiList[1]:
+				page = page + 1 < pages.length ? ++page : 0;
+				break;
+			default:
+				break;
+		}
+		curPage.edit({embeds:[pages[page].setFooter({text:`Page ${page + 1} / ${pages.length}`})]});
+	});
+	reactionCollector.on('end', () => {
+        galleryCache.deleteCache(`/ids/${id}`)
+        console.log('done');
+            if (!curPage.deleted) {
+            }
+        });
+	return curPage;
+};
 async function sendEmbed(data, Message) {
 	try {
     var json = JSON.parse(data)
@@ -80,7 +111,7 @@ async function sendEmbed(data, Message) {
             "text": "Instagram",
             "icon_url": "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png"
         },
-        "fields":[{"name":"Likes","value":json.items[0].like_count,"inline":true}],
+        "fields":[{"name":"Likes","value":`${json.items[0].like_count}`,"inline":true}],
         "author": {
             "name": json.items[0].user.username,
             "url": `https://www.instagram.com/${json.items[0].user.username}`,
@@ -107,7 +138,6 @@ async function sendEmbed(data, Message) {
     }
 if (json.items[0].carousel_media){
     test=galleryCache.getCache('/ids')
-const paginationEmbed = require('discord.js-pagination');
 var pages = [
 ];
 const { MessageEmbed } = require('discord.js');
