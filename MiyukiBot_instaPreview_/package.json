@@ -5,6 +5,6 @@
   "author": "",
   "dependencies": {
     "discord.js": "^13.6.0",
-    "node-json-db": "^1.4.1",
+    "node-json-db": "^1.4.1"
   }
 }
