@@ -6,6 +6,5 @@
   "dependencies": {
     "discord.js": "^13.6.0",
     "node-json-db": "^1.4.1",
-    "request": "2.88.2"
   }
 }
