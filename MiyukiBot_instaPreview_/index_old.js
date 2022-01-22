@@ -6,10 +6,8 @@ const { Client, Intents } = require('discord.js');
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
 });
-const req = require("request")
 const config = require("./config.json")
 const galleryCacheClass = require("./testGallery.js");
-//const { debug } = require("request");
 const galleryCache = new galleryCacheClass();
 const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
 client.on("ready", () => {
@@ -31,18 +29,25 @@ client.on("messageCreate", Message => {
             link = (link.includes('?')) ? `${link}&__a=1` : `${link}?__a=1`
             //make request
             try {
-                req({
-                    url: link,
-                    method: "GET",
+                https.get(link,{
                     headers: {
                         // 'Cookie': 'csrftoken=TOKEN;sessionid=SESSIONID'
                         'Cookie': config.cookie
                     }
-                }, async (e, r, b) => {
-                    // console.log('1')
-                    await wait(500)
+                }, async (response) => {
 
-                    sendEmbed(b, Message)
+                    var result = ''
+                    response.on('data', function (chunk) {
+                        result += chunk;
+                    });
+                
+                    response.on('end', async function () {
+                       // console.log(result);
+                        await wait(500)
+
+                        sendEmbed(result, Message)
+                    });
+                
                 })
             } catch (e) {
                 console.log(e);
