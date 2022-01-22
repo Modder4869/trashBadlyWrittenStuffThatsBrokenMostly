@@ -4,7 +4,7 @@ const { Client, Intents } = require('discord.js');
 const client = new Client({
   intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
 });
-const req = require("request")
+const https = require('https');
 const config = require("./config.json")
 const galleryCacheClass = require("./testGallery.js");
 const galleryCache = new galleryCacheClass();
@@ -13,42 +13,49 @@ client.on("ready", () => {
         console.log("Bot has initialized")
     })
 client.on("messageCreate", Message => {
-        //check if message author is bot and return
-        if (Message.author.bot) return;
-        //check if message has contents
-        if (!Message.content) return;
-        //check for masked and marked as spoilers links
-        if (Message.content.includes('||') || Message.content.includes('<')) return;
-        // get urls from message
-        var links = [...Message.content.split(/\n|\s|\r|\t|\0/g).filter(e => /www.instagram.com\/\w+\/(.{11})/.test(e))]
-        if (links.length > 0) {
-            for (let link of links) {
+    //check if message author is bot and return
+    if (Message.author.bot) return;
+    //check if message has contents
+    if (!Message.content) return;
+    //check for masked and marked as spoilers links
+    if (Message.content.includes('||') || Message.content.includes('<')) return;
+    // get urls from message
+    var links = [...Message.content.split(/\n|\s|\r|\t|\0/g).filter(e => /www.instagram.com\/\w+\/(.{11})/.test(e))]
+    if (links.length > 0) {
+        for (let link of links) {
 
-                link = `https://${/(www.instagram.com\/\w+\/.{11,39})/.exec(link)[0]}`
-		link = (link.includes('?')) ? `${link}&__a=1` :  `${link}?__a=1`
-                    //make request
-                try {
-                    req({
-                        url: link,
-                        method: "GET",
-                        headers: {
-                            // 'Cookie': 'csrftoken=TOKEN;sessionid=SESSIONID'
-                            'Cookie': config.cookie
-                        }
-                    }, async(e, r, b) => {
-                        // console.log('1')
+            link = `https://${/(www.instagram.com\/\w+\/.{11,39})/.exec(link)[0]}`
+            link = (link.includes('?')) ? `${link}&__a=1` : `${link}?__a=1`
+            //make request
+            try {
+                https.get(link,{
+                    headers: {
+                        // 'Cookie': 'csrftoken=TOKEN;sessionid=SESSIONID'
+                        'Cookie': config.cookie
+                    }
+                }, async (response) => {
+
+                    var result = ''
+                    response.on('data', function (chunk) {
+                        result += chunk;
+                    });
+                
+                    response.on('end', async function () {
+                       // console.log(result);
                         await wait(500)
 
-                        sendEmbed(b, Message)
-                    })
-                } catch (e) {
-                    console.log(e);
-                }
-                ///test=/(www.instagram.com\/\w+\/.{11})/.exec(link)
-
+                        sendEmbed(result, Message)
+                    });
+                
+                })
+            } catch (e) {
+                console.log(e);
             }
+            ///test=/(www.instagram.com\/\w+\/.{11})/.exec(link)
+
         }
-    })
+    }
+})
     //wait for reaction
 client.on('messageReactionAdd', (reaction, user) => {
     try {
