@@ -19,6 +19,8 @@ client.on("messageCreate", Message => {
     if (Message.author.bot) return;
     //check if message has contents
     if (!Message.content) return;
+    //remove mentions
+    Message.content = Message.content.replace(/<[@!#&]!?\d{18}>/g,'')
     //check for masked and marked as spoilers links
     if (Message.content.includes('||') || Message.content.includes('<')) return;
     // get urls from message
