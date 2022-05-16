@@ -26,7 +26,7 @@ client.on("messageCreate", Message => {
     if (links.length > 0) {
         for (let link of links) {
 
-            link = `https://${/(www.instagram.com\/\w+\/.{11,39})/.exec(link)[0]}`
+            link = `https://${/((?:www\.)?instagram.com\/\w+\/.{11,39})/.exec(link)[0]}`
             link = (link.includes('?')) ? `${link}&__a=1` : `${link}?__a=1`
             //make request
             try {
