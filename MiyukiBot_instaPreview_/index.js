@@ -21,6 +21,8 @@ client.on("messageCreate", Message => {
     Message.content = Message.content.replace(/<[@!#&]!?\d{18}>/g,'')
     //check for masked and marked as spoilers links
     if (Message.content.includes('||') || Message.content.includes('<')) return;
+    // check for discord own embed
+    if (Message?.embeds[0]?.url.includes('instagram')) return;
     // get urls from message
     var links = [...Message.content.split(/\n|\s|\r|\t|\0/g).filter(e => /www.instagram.com\/\w+\/(.{11})/.test(e))]
     if (links.length > 0) {
