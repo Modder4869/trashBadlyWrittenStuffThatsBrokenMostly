@@ -12,7 +12,7 @@ const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeT
 client.on("ready", () => {
         console.log("Bot has initialized")
     })
-client.on("messageCreate", Message => {
+client.on("messageCreate", async Message => {
     //check if message author is bot and return
     if (Message.author.bot) return;
     //check if message has contents
@@ -21,6 +21,8 @@ client.on("messageCreate", Message => {
     Message.content = Message.content.replace(/<[@!#&]!?\d{18}>/g,'')
     //check for masked and marked as spoilers links
     if (Message.content.includes('||') || Message.content.includes('<')) return;
+    // wait abit since brain dead
+    await wait(2000)
     // check for discord own embed
     if (Message?.embeds[0]?.url.includes('instagram')) return;
     // get urls from message
