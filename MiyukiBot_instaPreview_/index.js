@@ -24,8 +24,8 @@ client.on("messageCreate", async Message => {
     // wait abit since brain dead
     await wait(2000)
     // check for discord own embed 
-    console.log(Message.embeds[0])
-    if (Message?.embeds[0]?.url.includes('instagram') && !Message?.embeds[0]?.title?.includes('Login • Instagram')&& !(Message?.embeds[0]?.image || !Message?.embeds[0].video)) return;
+
+    if (Message?.embeds[0]?.url.includes('instagram') && !Message?.embeds[0]?.title?.includes('Login • Instagram')&& !(Message?.embeds[0]?.image || Message?.embeds[0].video)) return;
     // get urls from message
     var links = [...Message.content.split(/\n|\s|\r|\t|\0/g).filter(e => /www.instagram.com\/\w+\/(.{11})/.test(e))]
     if (links.length > 0) {
