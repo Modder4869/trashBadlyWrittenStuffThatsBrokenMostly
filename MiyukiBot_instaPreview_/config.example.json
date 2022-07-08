@@ -1,7 +1,7 @@
 {
     "token": "botToken",
     "prefix": "#",
-	"cookie":"csrftoken=instagram_csrftoken;sessionid=instagram_sessionid",
+	"cookie":"csrftoken=instagram_csrftoken;sessionid=instagram_sessionid;ds_user_id=instagram_ds_user_id",
 	"enabled":true,
 	"cacheTimeMs":7200000
 }
