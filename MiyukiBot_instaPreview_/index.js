@@ -31,12 +31,12 @@ client.on("messageCreate", async Message => {
         for (let link of links) {
 
             link = `https://${/((?:www\.)?instagram.com\/\w+\/.{11,39})/.exec(link)[0]}`
-            link = (link.includes('?')) ? `${link}&__a=1` : `${link}?__a=1`
+            link = (link.includes('?')) ? `${link}&__a=1&__d=dis` : `${link}?__a=1&__d=dis`
             //make request
             try {
                 https.get(link,{
                     headers: {
-                        // 'Cookie': 'csrftoken=TOKEN;sessionid=SESSIONID'
+                        // 'Cookie': 'csrftoken=TOKEN;sessionid=SESSIONID;ds_user_id='
                         'Cookie': config.cookie
                     }
                 }, async (response) => {
