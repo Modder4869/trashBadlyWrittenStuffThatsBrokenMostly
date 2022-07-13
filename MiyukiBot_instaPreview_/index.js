@@ -121,7 +121,7 @@ async function sendEmbed(data, Message) {
  var content = (json.items[0].carousel_media && json.items[0].carousel_media.find(e=>e.video_versions)?.video_versions && json.items[0].carousel_media) ? json.items[0].carousel_media.find(e=>e.video_versions).video_versions[0].url :  (json.items[0].video_versions)? json.items[0].video_versions[0].url : ""
     const embed = {
 
-        "description": (json.items[0].caption) ? json.items[0].caption.text.replace(/#[^\s!@#$%^&*()=+./,\[{\]};:'"?><]+\s/g,'').replace(/\n$/gm,'') : "",
+        "description": (json.items[0].caption) ? json.items[0].caption.text.replace(/#[^\s!@#$%^&*()=+./,\[{\]};:'"?><]+\s?/g,'').replace(/\n$/gm,'') : "",
         "footer": {
             "text": "Instagram",
             "icon_url": "https://www.instagram.com/static/images/ico/favicon-192.png/68d99ba29cc8.png"
